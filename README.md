@@ -1,50 +1,134 @@
-# Welcome to your Expo app 👋
+# Social Posts App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A sample social mobile application built with **Expo Go**, **React Native**, and **TypeScript**.
 
-## Get started
+The app displays a list of social posts and allows the user to open a post details screen to view the selected post with its comments.
 
-1. Install dependencies
+## Features
 
-   ```bash
-   npm install
-   ```
+* Home screen with a list of posts
+* Post cards showing:
 
-2. Start the app
+  * User name
+  * Circular avatar using the first letter of the user’s name
+  * Post title
+  * Post content
+* Post Details screen showing:
 
-   ```bash
-   npx expo start
-   ```
+  * Selected post at the top
+  * List of comments below the post
+* Comment cards showing:
 
-In the output, you'll find options to open the app in a
+  * User name
+  * Circular avatar
+  * Comment content
+* Navigation between screens using Expo Router
+* Loading and error states for API requests
+* Clean and mobile-friendly UI
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## APIs Used
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+The app uses the GoREST public API.
 
-## Get a fresh project
+### Posts
 
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+https://gorest.co.in/public/v2/posts
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Post Comments
 
-## Learn more
+```text
+https://gorest.co.in/public/v2/posts/{postId}/comments
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### Users
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```text
+https://gorest.co.in/public/v2/users/{userId}
+```
 
-## Join the community
+The posts endpoint only returns `user_id`, so the app fetches the user separately using the users endpoint.
 
-Join our community of developers creating universal apps.
+Since GoREST does not provide avatar images, the app creates a circular avatar using the first letter of the user’s name.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Screenshots
+
+### Home Screen
+
+![Home Screen](screenshots/home-screen.png)
+
+### Post Details Screen
+
+![Post Details Screen](screenshots/post-details-screen.png)
+
+## Project Structure
+
+```text
+app/
+  _layout.tsx
+  index.tsx
+  post/
+    [id].tsx
+
+src/
+  api/
+    gorest.ts
+  components/
+    Avatar.tsx
+    PostCard.tsx
+    CommentCard.tsx
+  types/
+    index.ts
+
+screenshots/
+  home-screen.png
+  post-details-screen.png
+```
+
+## How to Run the Project
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/mariaawadd/SOCIAL-POSTS-APP.git
+```
+
+### 2. Go into the project folder
+
+```bash
+cd SOCIAL-POSTS-APP
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Start the Expo development server
+
+```bash
+npx expo start
+```
+
+### 5. Run on mobile
+
+Open **Expo Go** on your phone and scan the QR code.
+
+## Technical Decisions
+
+* I used **Expo Router** to handle navigation between the Home screen and the Post Details screen.
+* I used **TypeScript types** to make the structure of posts, users, and comments clear.
+* I created reusable components for the avatar, post card, and comment card.
+* I used separate API functions in `src/api/gorest.ts` to keep the API logic away from the UI screens.
+* Since GoREST does not provide avatars, I used the first letter of each user’s name inside a circular avatar.
+* Since GoREST returns generated placeholder text, the app normalizes the displayed demo content to make the UI look cleaner and more realistic while still using the required API flow.
+
+## Time Taken
+
+Approximately 1 hour.
+
+## Author
+
+Maria Awad
