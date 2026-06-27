@@ -8,15 +8,30 @@ type PostCardProps = {
   onPress?: () => void;
 };
 
+function createUsername(name: string) {
+  const username = name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, ".")
+    .replace(/^\.|\.$/g, "");
+
+  return `@${username || "user"}`;
+}
+
 export default function PostCard({ post, onPress }: PostCardProps) {
+  const username = createUsername(post.user.name);
+
   return (
-    <Pressable style={styles.card} onPress={onPress}>
+    <Pressable
+      style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+      onPress={onPress}
+    >
       <View style={styles.header}>
-        <Avatar name={post.user.name} />
+        <Avatar name={post.user.name} size={48} />
 
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{post.user.name}</Text>
-          <Text style={styles.userEmail}>{post.user.email}</Text>
+          <Text style={styles.username}>{username}</Text>
         </View>
       </View>
 
@@ -25,23 +40,42 @@ export default function PostCard({ post, onPress }: PostCardProps) {
       <Text style={styles.body} numberOfLines={3}>
         {post.body}
       </Text>
+
+      {onPress && (
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>View discussion</Text>
+          <Text style={styles.footerArrow}>→</Text>
+        </View>
+      )}
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "white",
-    padding: 16,
-    borderRadius: 14,
-    marginBottom: 14,
+    backgroundColor: "#ffffff",
+    padding: 18,
+    borderRadius: 22,
+    marginBottom: 16,
     borderWidth: 1,
     borderColor: "#e5e7eb",
+    shadowColor: "#000",
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    elevation: 2,
+  },
+  cardPressed: {
+    opacity: 0.85,
+    transform: [{ scale: 0.99 }],
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 14,
   },
   userInfo: {
     marginLeft: 12,
@@ -49,23 +83,43 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: "800",
     color: "#111827",
   },
-  userEmail: {
-    fontSize: 13,
+  username: {
+    fontSize: 14,
     color: "#6b7280",
     marginTop: 2,
   },
   title: {
-    fontSize: 17,
-    fontWeight: "700",
+    fontSize: 18,
+    fontWeight: "800",
     color: "#111827",
     marginBottom: 8,
+    lineHeight: 24,
   },
   body: {
     fontSize: 15,
-    color: "#374151",
-    lineHeight: 21,
+    color: "#4b5563",
+    lineHeight: 22,
+  },
+  footer: {
+    marginTop: 16,
+    paddingTop: 14,
+    borderTopWidth: 1,
+    borderTopColor: "#f3f4f6",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  footerText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#2563eb",
+  },
+  footerArrow: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#2563eb",
   },
 });
